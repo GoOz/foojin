@@ -1,10 +1,19 @@
 :root {
-  --dark: black;
-  --darkgrey: #222;
+  --dark: #292929;
+  --darkgrey: #252525;
   --light: white;
+  --shadow: #888;
+  --dropshadow: 2px 2px 1px var(--shadow);
+  --networkIconSize: 8vw;
+  --transition: 300ms ease-in-out;
 }
+
 body {
-  background-color:var(--darkgrey);
+  margin: 0;
+  color: var(--light);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font-size: clamp(1rem, 2vw, 3rem);
+  background-color: var(--dark);
   background-image:
 radial-gradient(circle at 100% 150%, var(--darkgrey) 24%, var(--dark) 24%, var(--dark) 28%, var(--darkgrey) 28%, var(--darkgrey) 36%, var(--dark) 36%, var(--dark) 40%, transparent 40%, transparent),
 radial-gradient(circle at 0    150%, var(--darkgrey) 24%, var(--dark) 24%, var(--dark) 28%, var(--darkgrey) 28%, var(--darkgrey) 36%, var(--dark) 36%, var(--dark) 40%, transparent 40%, transparent),
@@ -12,86 +21,262 @@ radial-gradient(circle at 50%  100%, var(--dark) 10%, var(--darkgrey) 10%, var(-
 radial-gradient(circle at 100% 50%, var(--dark) 5%, var(--darkgrey) 5%, var(--darkgrey) 15%, var(--dark) 15%, var(--dark) 20%, var(--darkgrey) 20%, var(--darkgrey) 29%, var(--dark) 29%, var(--dark) 34%, var(--darkgrey) 34%, var(--darkgrey) 44%, var(--dark) 44%, var(--dark) 49%, transparent 49%, transparent),
 radial-gradient(circle at 0    50%, var(--dark) 5%, var(--darkgrey) 5%, var(--darkgrey) 15%, var(--dark) 15%, var(--dark) 20%, var(--darkgrey) 20%, var(--darkgrey) 29%, var(--dark) 29%, var(--dark) 34%, var(--darkgrey) 34%, var(--darkgrey) 44%, var(--dark) 44%, var(--dark) 49%, transparent 49%, transparent);
   background-size: 6.25rem 3.125rem;
-
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
-  text-align: center;
-  color: var(--light);
+}
+#sprite {
+  display: none;
 }
 
+/* Layout */
+article {
+  scroll-snap-type: y mandatory;
+  max-height: 100dvh;
+  overflow: auto;
+}
 h1, h2 {
-  font-style: italic;
-}
-p {
-  padding: 1rem;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-figure {
-  display: inline-block;
-  max-height: 40dvh;
-  aspect-ratio: 2 / 3;
-  padding: clamp(.5rem, 5vw, 2.5rem);
-  padding-bottom: 2.5rem;
-  border-width: 1.25rem;
-  border-style: solid;
-  border-color: #2F2D2D #434040 #4F4C4C #434040;
-  background: #f5f5f5;
-  background-image: linear-gradient(#E5E4DF, #CDCDC6);
-  box-shadow: inset 0 .125rem .3125rem rgba(0,0,0,.6),0 .3125 rem.125rem rgba(0,0,0,.1), 0 .625rem 1.25rem rgba(0,0,0,.8);
-  position: relative;
-  overflow: hidden;
-}
-figure::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  transform: rotateZ(-40deg);
-  background-image: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,0));
-}
-figure img {
-  width: 100%;
-  border-width: .125rem;
-  border-style: solid;
-  border-color: #BBBAB4 #C7C7BF #E5E4DF #C7C7BF;
-  box-shadow:  0 -.0625rem .0625rem rgba(0,0,0,.1), 0 .0625rem .0625rem .0625rem rgba(255,255,255,.7);
-}
-figcaption {
-  padding: 0.25rem;
-  font-style: italic;
-  font-weight: bold;
-  font-size: 1.2em;
-  text-shadow: .0625rem .0625rem var(--light);
-  color: var(--dark);
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 2rem auto;
   display: flex;
-  max-width: 60vw;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  font-family: "Arial Black", sans-serif;
+  text-transform: uppercase;
+  font-size: 6vw;
+  text-shadow: .5vw .5vw 1px var(--shadow);
 }
-li {
-  flex: 1 0 auto;
+:is(h1, h2) span {
+  display: block;
+  white-space: nowrap;
+  line-height: 1;
 }
-li a {
-  font-size: 1.2em;
-  display: inline-block;
+.frame {
+  position: relative;
+  max-width: 80vw;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5vw;
+  align-items: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.frame > * {
+  flex: 0 0 calc(50% - 2.5vw);
+}
+.frame > div:last-of-type {
+  display: flex;
+  justify-content: center;
+}
+.frame > div:last-of-type div {
+  width: auto;
+}
+.ampersand {
+  font-family: serif;
+  position: absolute;
+  width: 100%;
+  inset-block-end: 0;
+  text-align: center;
+  font-style: italic;
+  font-size: 6vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: .5;
+}
+.ampersand::before,
+.ampersand::after {
+  content: '';
+  height: 1px;
+  flex: 1 1 auto;
+  margin-inline: 1rem;
+}
+.ampersand::before {
+  background-image: linear-gradient(to right, var(--dark), var(--light));
+}
+.ampersand::after {
+  background-image: linear-gradient(to left, var(--dark), var(--light));
+}
+
+/* Basics */
+figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  height: 100%;
+}
+figure svg {
+  width: 80%;
+  height: 80%;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 1px var(--shadow));
+}
+a:link, a:visited {
+  position: relative;
   color: var(--light);
   text-decoration: none;
-  position: relative;
-  border: .125rem solid var(--light);
-  border-radius: 1rem;
-  padding: .5rem 1.5rem;
-  transition: 0.25s;
-  box-shadow: inset 0 0 0 0 var(--light);
+  transition: text-shadow var(--transition);
 }
-li a:is(:hover, :focus, :active) {
-  color: var(--dark);
-  box-shadow: inset 0 -3.25em 0 0 var(--light);
+:is(a:link) .network-icon {
+  transition: filter var(--transition);
+}
+a:hover, a:active, a:focus, a:focus-visible {
+  text-shadow: var(--dropshadow);
+  outline: none;
+}
+:is(a:hover, a:active, a:focus-visible) .network-icon {
+  filter: drop-shadow(var(--dropshadow));
+}
+:is(a, abbr):focus-visible {
+  outline-offset: .125rem;
+  outline: 2px solid var(--light);
+}
+:is(a:link)::after {
+  position: absolute;
+  content: '';
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  border-block-start: .125rem solid var(--light);
+  transition: inset-block-end var(--transition);
+}
+:is(a:hover, a:active, a:focus-visible)::after {
+  inset-block-end: -.25rem;
+}
+:is(a.icon-only:link)::after {
+  content: none;
+}
+ul {
+  list-style-image: url(img/puce.svg);
+  padding-inline-start: 2rem;
+}
+li::marker {
+  font-size: 1.5em;
+  line-height: 1;
+}
+li {
+  margin-block-end: .5rem;
+}
+abbr {
+  position: relative;
+  text-decoration-line: underline;
+  text-decoration-style: double;
+}
+abbr[title]:is(:hover, :focus, :focus-visible)::after {
+  content: attr(title);
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: -1.5rem;
+  width: auto;
+  white-space: nowrap;
+  background-color: var(--dark);
+  color: var(--light);
+  border-radius: .1875rem;
+  box-shadow: 1px 1px 5px 0 var(--darkgrey);
+  font-size: .7rem;
+  padding: .1875rem .25rem;
+  z-index: 1;
+}
+@media (pointer: fine) {
+  abbr[title]:is(:hover)::after {
+    content: none;
+  }
+}
+
+/* Titles */
+.title--first :first-child {
+    font-size: 20vw;
+  }
+  .title--first :nth-child(2) {
+    font-size: 15.5vw;
+  }
+  .title--first :last-child {
+    margin-block-start: 6vw;
+    font-size: 12.5vw;
+  }
+  .title--second :first-child {
+    font-size: 13vw;
+  }
+  .title--second :last-child {
+    font-size: 11.8vw;
+  }
+  .title--third :first-child {
+    font-size: 14vw;
+  }
+  .title--third :last-child {
+    font-size: 8.5vw;
+  }
+  .title--fourth :first-child {
+    font-size: 11.4vw;
+  }
+  .title--fourth :last-child {
+    font-size: 12.2vw;
+  }
+  .title--fifth :first-child {
+    font-size: 15.9vw;
+  }
+  .title--fifth :last-child {
+    font-size: 15.2vw;
+  }
+
+/* Misc */
+.inline-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.network-icon {
+  fill: var(--light);
+  display: block;
+  width: var(--networkIconSize);
+  height: var(--networkIconSize);
+}
+
+@media screen and (min-width: 40em) {
+  h1, h2 {
+    text-shadow: .2vw .2vw 1px var(--shadow);
+  }
+  .frame {
+    flex-direction: row;
+  }
+  .title--first :first-child {
+    font-size: 9.3vw;
+  }
+  .title--first :nth-child(2) {
+    font-size: 7.2vw;
+  }
+  .title--first :last-child {
+    margin-block-start: 3vw;
+    font-size: 5.8vw;
+  }
+  .title--second :first-child {
+    font-size: 6vw;
+  }
+  .title--second :last-child {
+    font-size: 5.5vw;
+  }
+  .title--third :first-child {
+    font-size: 6.56vw;
+  }
+  .title--third :last-child {
+    font-size: 4vw;
+  }
+  .title--fourth :first-child {
+    font-size: 5.3vw;
+  }
+  .title--fourth :last-child {
+    font-size: 5.66vw;
+  }
+  .title--fifth :first-child {
+    font-size: 7.48vw;
+  }
+  .title--fifth :last-child {
+    font-size: 7.15vw;
+  }
+  .network-icon {
+    --networkIconSize: 3vw;
+  }
 }
